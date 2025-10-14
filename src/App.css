@@ -1,17 +1,128 @@
-body, html {
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #c3ecf9 0%, #ffffff 100%);
   margin: 0;
-  padding: 0;
+  padding: 2rem 1rem;
+  color: #1f2937;
 }
 
-.main-header {         
-  top: 0;                   
-  left: 0;
-  width: 100%;             
-  text-align: center;      
-  padding: 1rem 0;         
-  background-color: #ffffff;
-  color: #1e3a8a;            
+h1 {
   font-size: 2rem;
-  font-weight: bold;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: #1e3a8a;
+}
+
+p.subtitle {
+  text-align: center;
+  font-size: 1rem;
+  color: #374151;
+  margin-bottom: 2rem;
+}
+
+.carousel-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.carousel {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 1rem;
+}
+
+.carousel::-webkit-scrollbar {
+  height: 8px;
+}
+
+.carousel::-webkit-scrollbar-thumb {
+  background: rgba(30, 58, 138, 0.5);
+  border-radius: 4px;
+}
+
+.hour-card {
+  flex: 0 0 auto;
+  min-width: 130px;
+  background: white;
+  border-radius: 1rem;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.hour-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+.hour-time {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.hour-temp {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.hour-details {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #374151;
+  line-height: 1.4;
+}
+
+.info {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+
+.carousel-btn {
+  background: #1e3a8a;
+  color: white;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.carousel-btn:hover:not(:disabled) {
+  background: #374bbf;
+  transform: scale(1.1);
+}
+
+.carousel-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+
+.hour-temp.hot {
+  color: #f97316;
+}
+
+.hour-temp.cold {
+  color: #3b82f6; /
+}
+
+.main-header {
+    text-align: center;
+    font-size: 14pt;
 }

@@ -7,32 +7,48 @@ export default function HourlyCard({
   humidity,
   rainProb,
   wind,
-  windDir,
   clouds,
   uv,
 }) {
   const [expanded, setExpanded] = useState(false);
-  const hour = new Date(time).getHours();
 
-  return (
-    <div className="hourCard">
-      <p className="hour">{hour}:00</p>
-      <p className="temp">🌡️ {temp}°C</p>
+ 
+  let hour = "N/A";
+  try {
+    const date = new Date(time);
+    if (!isNaN(date.getTime())) {
+      hour = date.toLocaleTimeString([], {
+        hour: "numeric",
+        hour12: true,
+      });
+    }
+  } catch (e) {
+    console.error("Invalid time:", time);
+  }
 
-      <button className="moreInfoBtn" onClick={() => setExpanded(!expanded)}>
-        {expanded ? "Hide Info" : "More Info"}
-      </button>
+return (
+  <div
+    className={`hour-card ${expanded ? "expanded" : ""}`}
+    onClick={() => setExpanded(!expanded)}
+  >
+    <p className="hour-time">{hour}</p>
+    <p className="hour-temp">{temp !== undefined ? Math.round(temp) + "°C" : "N/A"}</p>
+    
 
-      {expanded && (
-        <div className="hourDetails">
-          <p>🤗 Feels Like: {feelsLike}°C</p>
-          <p>💧 Humidity: {humidity}%</p>
-          <p>🌧️ Precipitation Probability: {rainProb}%</p>
-          <p>💨 Wind: {wind} m/s ({windDir}°)</p>
-          <p>☁️ Cloud Cover: {clouds}%</p>
-          <p>🌞 UV Index: {uv}</p>
-        </div>
-      )}
-    </div>
-  );
+    <p className="info">
+      {expanded ? "Click for less information" : "Click for more information"}
+    </p>
+
+    {expanded && (
+      <div className="hour-details">
+        <p>Feels: {feelsLike !== undefined ? Math.round(feelsLike) + "°C" : "N/A"}</p>
+        <p>Humidity: {humidity ?? "N/A"}%</p>
+        <p>Rain: {rainProb ?? "N/A"}%</p>
+        <p>Wind: {wind ?? "N/A"} m/s</p>
+        <p>Clouds: {clouds ?? "N/A"}%</p>
+        <p>UV: {uv ?? "N/A"}</p>
+      </div>
+    )}
+  </div>
+);
 }
