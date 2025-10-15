@@ -3,6 +3,8 @@ import HourlyCard from "./HourlyCard";
 
 export default function HourlyForecast() {
   const [todayHours, setTodayHours] = useState([]);
+  const [availableDates, setAvailableDates] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
@@ -17,31 +19,20 @@ export default function HourlyForecast() {
         if (!res.ok) throw new Error("Failed to fetch weather data");
         const data = await res.json();
 
-        const today = new Date();
-        const todayYear = today.getFullYear();
-        const todayMonth = today.getMonth();
-        const todayDate = today.getDate();
+        const hours = data.hourly.time.map((time, idx) => ({
+          time,
+          temp: data.hourly.temperature_2m[idx],
+          feelsLike: data.hourly.apparent_temperature[idx],
+          humidity: data.hourly.relative_humidity_2m[idx],
+          rainProb: data.hourly.precipitation_probability[idx],
+          wind: data.hourly.wind_speed_10m[idx],
+          clouds: data.hourly.cloud_cover[idx],
+          uv: data.hourly.uv_index[idx],
+        }));
 
-        const hours = data.hourly.time
-          .map((time, idx) => ({
-            time,
-            temp: data.hourly.temperature_2m[idx],
-            feelsLike: data.hourly.apparent_temperature[idx],
-            humidity: data.hourly.relative_humidity_2m[idx],
-            rainProb: data.hourly.precipitation_probability[idx],
-            wind: data.hourly.wind_speed_10m[idx],
-            clouds: data.hourly.cloud_cover[idx],
-            uv: data.hourly.uv_index[idx],
-          }))
-          .filter((hour) => {
-            const hourDate = new Date(hour.time);
-            return (
-              hourDate.getFullYear() === todayYear &&
-              hourDate.getMonth() === todayMonth &&
-              hourDate.getDate() === todayDate
-            );
-          });
-
+        const dates = [...new Set(hours.map(h => h.time.split("T")[0]))];
+        setAvailableDates(dates);
+        setSelectedDate(dates[0]);
         setTodayHours(hours);
       } catch (err) {
         setError(err.message);
@@ -53,46 +44,74 @@ export default function HourlyForecast() {
     fetchWeather();
   }, []);
 
-  const handlePrevious = () => {
-    setCurrentPage((p) => Math.max(p - 1, 0));
-  };
+  const handlePrevious = () => setCurrentPage(p => Math.max(p - 1, 0));
+  const handleNext = () => setCurrentPage(p => Math.min(p + 1, totalPages - 1));
 
-  const handleNext = () => {
-    setCurrentPage((p) => Math.min(p + 1, totalPages - 1));
-  };
-
-  if (loading) return <p className="loading">⏳ Loading hourly forecast…</p>;
+  if (loading) return <p className="loading">⏳ Loading forecast…</p>;
   if (error) return <p className="error">⚠️ {error}</p>;
 
-  const totalPages = Math.ceil(todayHours.length / cardsPerPage);
+  const filteredHours = todayHours.filter(hour =>
+    hour.time.startsWith(selectedDate)
+  );
+
+  const totalPages = Math.ceil(filteredHours.length / cardsPerPage);
   const startIndex = currentPage * cardsPerPage;
-  const visibleHours = todayHours.slice(startIndex, startIndex + cardsPerPage);
+  const visibleHours = filteredHours.slice(startIndex, startIndex + cardsPerPage);
 
   return (
-    <div className="carousel-container">
-      <button
-        className="carousel-btn"
-        onClick={handlePrevious}
-        disabled={currentPage === 0}
-        aria-label="Previous hours"
-      >
-        ◀
-      </button>
-
-      <div className="carousel">
-        {visibleHours.map((hour) => (
-          <HourlyCard key={hour.time} {...hour} />
-        ))}
+    <div>
+      
+      <div className="day-selector">
+        {availableDates.map(date => {
+          const label = new Date(date).toLocaleDateString(undefined, {
+            weekday: "short",
+            day: "numeric",
+            month: "short",
+          });
+          return (
+            <button
+              key={date}
+              className={`day-btn ${date === selectedDate ? "active" : ""}`}
+              onClick={() => {
+                setSelectedDate(date);
+                setCurrentPage(0);
+              }}
+            >
+              {label}
+            </button>
+          );
+        })}
       </div>
 
-      <button
-        className="carousel-btn"
-        onClick={handleNext}
-        disabled={currentPage === totalPages - 1}
-        aria-label="Next hours"
-      >
-        ▶
-      </button>
+   
+   <div className="carousel-container">
+  <button
+    className="carousel-btn left"
+    onClick={handlePrevious}
+    disabled={currentPage === 0}
+    aria-label="Previous hours"
+  >
+    ◀
+  </button>
+
+  
+  <div className="carousel-wrapper">
+    <div className="carousel">
+      {visibleHours.map((hour) => (
+        <HourlyCard key={hour.time} {...hour} />
+      ))}
+    </div>
+  </div>
+
+  <button
+    className="carousel-btn right"
+    onClick={handleNext}
+    disabled={currentPage === totalPages - 1}
+    aria-label="Next hours"
+  >
+    ▶
+  </button>
+</div>
     </div>
   );
 }
