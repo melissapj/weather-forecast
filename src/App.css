@@ -15,6 +15,7 @@
   --shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.2);
 }
 
+
 body {
   font-family: "Inter", sans-serif;
   background: linear-gradient(
@@ -34,6 +35,19 @@ body {
   flex-direction: column;
 }
 
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+  min-height: 50vh;
+  animation: fadeIn 0.4s ease;
+}
+
+
 .main-header h1 {
   font-size: 2.2rem;
   font-weight: 800;
@@ -50,6 +64,7 @@ body {
   margin-bottom: 2rem;
   opacity: 0.85;
 }
+
 
 .day-selector {
   display: flex;
@@ -71,8 +86,7 @@ body {
   cursor: pointer;
   font-size: 0.9rem;
   backdrop-filter: blur(4px);
-  transition: background var(--transition-fast),
-    transform var(--transition-fast);
+  transition: background var(--transition-fast), transform var(--transition-fast);
   scroll-snap-align: center;
   white-space: nowrap;
 }
@@ -88,6 +102,7 @@ body {
   font-weight: 600;
   box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
 }
+
 
 .carousel-container {
   position: relative;
@@ -139,6 +154,7 @@ body {
   background: linear-gradient(to left, rgba(255, 255, 255, 0.5), transparent);
 }
 
+
 .hour-card {
   flex: 0 0 auto;
   min-width: 140px;
@@ -148,9 +164,23 @@ body {
   padding: 1rem;
   text-align: center;
   box-shadow: var(--shadow-soft);
-  transition: transform var(--transition-medium),
-    box-shadow var(--transition-medium), background var(--transition-fast);
+  transition:
+    transform var(--transition-medium),
+    box-shadow var(--transition-medium),
+    background var(--transition-fast),
+    max-height 0.4s ease,
+    padding 0.3s ease;
   scroll-snap-align: center;
+  cursor: pointer;
+  overflow: hidden;
+  max-height: 200px;
+}
+
+.hour-card.expanded {
+  max-height: 360px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-5px) scale(1.02);
 }
 
 .hour-card:hover,
@@ -160,31 +190,80 @@ body {
   background: rgba(255, 255, 255, 0.95);
 }
 
+
 .hour-time {
   font-weight: 600;
   margin-bottom: 0.3rem;
   color: var(--text-dark);
+  font-size: 1rem;
 }
 
 .hour-temp {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: 700;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.4rem;
   letter-spacing: -0.5px;
-}
-
-.hour-details {
-  margin-top: 0.5rem;
-  font-size: 0.85rem;
-  color: var(--text-light);
-  line-height: 1.5;
+  color: var(--text-dark); 
 }
 
 .info {
   font-size: 0.8rem;
   color: var(--text-light);
   margin-top: 0.25rem;
+  transition: opacity var(--transition-fast);
 }
+
+.hour-card:hover .info {
+  opacity: 0.9;
+}
+
+.hour-details {
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem 0.8rem;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.hour-card.expanded .hour-details {
+  opacity: 1;
+  transform: translateY(0);
+}
+.hour-details {
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem 0.8rem;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.hour-card.expanded .hour-details {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hour-details p {
+  text-align: center;
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
+}
+
+.hour-details p:nth-child(1) { color: #2563eb; }
+.hour-details p:nth-child(2) { color: #0891b2; } 
+.hour-details p:nth-child(3) { color: #0ea5e9; } 
+.hour-details p:nth-child(4) { color: #059669; } 
+.hour-details p:nth-child(5) { color: #7c3aed; } 
+.hour-details p:nth-child(6) { color: #d97706; } 
+
 
 .carousel-btn {
   position: absolute;
@@ -200,8 +279,7 @@ body {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: background var(--transition-fast),
-    transform var(--transition-fast);
+  transition: background var(--transition-fast), transform var(--transition-fast);
   border: none;
   z-index: 3;
   box-shadow: var(--shadow-soft);
@@ -225,4 +303,34 @@ body {
   background: #9ca3af;
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+
+.location-search {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.location-search input {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  min-width: 200px;
+}
+
+.location-search button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.location-search button:hover {
+  background: var(--primary-light);
 }
