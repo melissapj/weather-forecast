@@ -1,3 +1,36 @@
 # 🌦 London Hourly Weather Forecast
 
-# This is a frontend project using https://api.open-meteo.com/ and built with Vite, HTML, CSS, and JavaScript. The app allows users to browse the current days weather by hour in London and also to have the option to views the future days.
+A simple and clean weather forecast frontend built with Vite, HTML, CSS, and JavaScript. This app uses the Open-Meteo API to display hourly forecasts for the selected location. Users can view the current day’s forecast by hour, as well as browse forecasts for upcoming days.
+
+# Tech Stacks
+- React
+- Vite
+- JavaScript
+
+# Deployed link
+
+https://hourly-forecast-app.netlify.app/
+
+# Running Locally
+Clone the repository
+git clone https://github.com/melissapj/weather-forecast
+
+Navigate into the project folder 
+cd weather-forecast
+
+Install dependencies 
+npm install
+
+Start the development server 
+npm run dev
+
+Open your browser The terminal will show a local URL; visit it to see the app running
+
+# API
+
+This project uses the Open-Meteo API to fetch:
+- Hourly temperature & apparent temperature
+- Humidity and cloud cover
+- Rain probability
+- Wind speed
+- UV index
