@@ -15,16 +15,16 @@ https://hourly-forecast-app.netlify.app/
 
 # Running Locally
 
-Clone the repository
+Clone the repository:
 git clone https://github.com/melissapj/weather-forecast
 
-Navigate into the project folder 
+Navigate into the project folder:
 cd weather-forecast
 
-Install dependencies 
+Install dependencies:
 npm install
 
-Start the development server 
+Start the development server:
 npm run dev
 
 Open your browser The terminal will show a local URL; visit it to see the app running
