@@ -2,6 +2,8 @@
 
 A simple and clean weather forecast frontend built with Vite, HTML, CSS, and JavaScript. This app uses the Open-Meteo API to display hourly forecasts for the selected location. Users can view the current day’s forecast by hour, as well as browse forecasts for upcoming days.
 
+> **Note:** This app is designed for **desktop and web browsers**. Mobile layouts may not be fully optimized.
+
 # Tech Stacks
 - React
 - Vite
